@@ -10,47 +10,127 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
         }
-        #form-section {
-            margin-bottom: 20px;
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            font-size: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .view-section {
+            text-align: center;
+        }
+
+        img {
+            width: 200px;
+            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <h1>Upload or View NCERT 2024 Data</h1>
-    <div id="form-section">
-        <h2>Upload Data</h2>
-        <form id="uploadForm">
-            <label for="idCode">Special ID Code:</label>
-            <input type="password" id="idCode" required><br><br>
-            
-            <label for="subject">Select Subject:</label>
-            <input type="text" id="subject" placeholder="e.g., Mathematics" required><br><br>
 
-            <label for="chapter">Chapter:</label>
-            <input type="text" id="chapter" placeholder="e.g., Chapter 1" required><br><br>
+    <div class="container">
+        <h1>NCERT 2024 Data Upload/Viewer</h1>
 
-            <label for="file">Upload Image:</label>
-            <input type="file" id="file" accept="image/*" required><br><br>
+        <div id="form-section">
+            <h2>Upload Data</h2>
+            <form id="uploadForm">
+                <label for="idCode">Special ID Code:</label>
+                <input type="password" id="idCode" placeholder="Enter Special Code" required><br>
 
-            <button type="submit">Upload</button>
-        </form>
-    </div>
+                <label for="subject">Select Subject:</label>
+                <select id="subject" required>
+                    <option value="">--Select Subject--</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Science">Science</option>
+                    <option value="English">English</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="Social Science">Social Science</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Biology">Biology</option>
+                    <!-- Add more subjects as needed -->
+                </select><br>
 
-    <div id="view-section">
-        <h2>View Data</h2>
-        <form id="viewForm">
-            <label for="subjectView">Select Subject:</label>
-            <input type="text" id="subjectView" placeholder="e.g., Mathematics" required><br><br>
+                <label for="chapter">Chapter:</label>
+                <input type="text" id="chapter" placeholder="Enter Chapter (e.g., Chapter 1)" required><br>
 
-            <label for="chapterView">Chapter:</label>
-            <input type="text" id="chapterView" placeholder="e.g., Chapter 1" required><br><br>
+                <label for="file">Upload Image:</label>
+                <input type="file" id="file" accept="image/*" required><br>
 
-            <button type="submit">View</button>
-        </form>
+                <button type="submit">Upload</button>
+            </form>
+        </div>
 
-        <div id="displayImages"></div>
+        <div id="view-section" class="view-section">
+            <h2>View Data</h2>
+            <form id="viewForm">
+                <label for="subjectView">Select Subject:</label>
+                <select id="subjectView" required>
+                    <option value="">--Select Subject--</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Science">Science</option>
+                    <option value="English">English</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="Social Science">Social Science</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Biology">Biology</option>
+                </select><br>
+
+                <label for="chapterView">Chapter:</label>
+                <input type="text" id="chapterView" placeholder="Enter Chapter (e.g., Chapter 1)" required><br>
+
+                <button type="submit">View</button>
+            </form>
+
+            <div id="displayImages"></div>
+        </div>
     </div>
 
     <script>
@@ -75,7 +155,7 @@
             e.preventDefault();
 
             const idCode = document.getElementById('idCode').value;
-            const allowedID = "vaibhav123"; // Replace with your allowed ID
+            const allowedID = "vaibhav123"; // Special code for upload authentication
             if (idCode !== allowedID) {
                 alert('Invalid ID Code!');
                 return;
@@ -124,8 +204,6 @@
                 const imgElement = document.createElement('img');
                 imgElement.src = data.fileUrl;
                 imgElement.alt = `Image for ${subject}, ${chapter}`;
-                imgElement.style.width = '200px';
-                imgElement.style.margin = '10px';
                 displayDiv.appendChild(imgElement);
             });
 
