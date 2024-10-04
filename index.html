@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCERT 2024 Data Upload/Viewer</title>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #form-section {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload or View NCERT 2024 Data</h1>
+    <div id="form-section">
+        <h2>Upload Data</h2>
+        <form id="uploadForm">
+            <label for="idCode">Special ID Code:</label>
+            <input type="password" id="idCode" required><br><br>
+            
+            <label for="subject">Select Subject:</label>
+            <input type="text" id="subject" placeholder="e.g., Mathematics" required><br><br>
+
+            <label for="chapter">Chapter:</label>
+            <input type="text" id="chapter" placeholder="e.g., Chapter 1" required><br><br>
+
+            <label for="file">Upload Image:</label>
+            <input type="file" id="file" accept="image/*" required><br><br>
+
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+
+    <div id="view-section">
+        <h2>View Data</h2>
+        <form id="viewForm">
+            <label for="subjectView">Select Subject:</label>
+            <input type="text" id="subjectView" placeholder="e.g., Mathematics" required><br><br>
+
+            <label for="chapterView">Chapter:</label>
+            <input type="text" id="chapterView" placeholder="e.g., Chapter 1" required><br><br>
+
+            <button type="submit">View</button>
+        </form>
+
+        <div id="displayImages"></div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFLQzHxVw5UV1481iRfruD9AEenf_M_lI",
+            authDomain: "realtime-sync-project.firebaseapp.com",
+            databaseURL: "https://realtime-sync-project-default-rtdb.firebaseio.com",
+            projectId: "realtime-sync-project",
+            storageBucket: "realtime-sync-project.appspot.com",
+            messagingSenderId: "1079348282119",
+            appId: "1:1079348282119:web:57d72c95e6212070fe7ba2",
+            measurementId: "G-XKVNBVD6RE"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+
+        // Upload form
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const idCode = document.getElementById('idCode').value;
+            const allowedID = "YOUR_SPECIAL_CODE"; // Replace with your allowed ID
+            if (idCode !== allowedID) {
+                alert('Invalid ID Code!');
+                return;
+            }
+
+            const subject = document.getElementById('subject').value;
+            const chapter = document.getElementById('chapter').value;
+            const file = document.getElementById('file').files[0];
+
+            if (file) {
+                const storageRef = storage.ref(`ncert_2024/${subject}/${chapter}/${file.name}`);
+                await storageRef.put(file);
+                const downloadURL = await storageRef.getDownloadURL();
+
+                // Store reference in Firestore
+                await db.collection('ncert_2024').add({
+                    subject: subject,
+                    chapter: chapter,
+                    fileUrl: downloadURL,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                alert('File uploaded successfully!');
+            } else {
+                alert('Please select a file to upload.');
+            }
+        });
+
+        // View form
+        document.getElementById('viewForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const subject = document.getElementById('subjectView').value;
+            const chapter = document.getElementById('chapterView').value;
+
+            const querySnapshot = await db.collection('ncert_2024')
+                .where('subject', '==', subject)
+                .where('chapter', '==', chapter)
+                .get();
+
+            const displayDiv = document.getElementById('displayImages');
+            displayDiv.innerHTML = ''; // Clear previous content
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const imgElement = document.createElement('img');
+                imgElement.src = data.fileUrl;
+                imgElement.alt = `Image for ${subject}, ${chapter}`;
+                imgElement.style.width = '200px';
+                imgElement.style.margin = '10px';
+                displayDiv.appendChild(imgElement);
+            });
+
+            if (querySnapshot.empty) {
+                displayDiv.innerHTML = '<p>No data found for the specified subject and chapter.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
