@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NCERT 2024 Data Upload/Viewer</title>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-storage.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -135,18 +135,17 @@
 
     <script>
         const firebaseConfig = {
-            apiKey: "AIzaSyBFLQzHxVw5UV1481iRfruD9AEenf_M_lI",
-            authDomain: "realtime-sync-project.firebaseapp.com",
-            databaseURL: "https://realtime-sync-project-default-rtdb.firebaseio.com",
-            projectId: "realtime-sync-project",
-            storageBucket: "realtime-sync-project.appspot.com",
-            messagingSenderId: "1079348282119",
-            appId: "1:1079348282119:web:57d72c95e6212070fe7ba2",
-            measurementId: "G-XKVNBVD6RE"
+            apiKey: "AIzaSyCo6wUYmhkvQB9cc3xS50MHUA_n2lv2z6A",
+            authDomain: "work-5857f.firebaseapp.com",
+            projectId: "work-5857f",
+            storageBucket: "work-5857f.appspot.com",
+            messagingSenderId: "543194100003",
+            appId: "1:543194100003:web:34e26f86f8a83f2bd65c96",
+            measurementId: "G-Q3V60M6SRS"
         };
 
         // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
+        firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const storage = firebase.storage();
 
